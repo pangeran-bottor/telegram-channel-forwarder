@@ -1,0 +1,20 @@
+{
+    "SESSION_NAME": "testing",
+    "API_ID": "",
+    "API_HASH": "",
+    "SOURCE_CHANNEL_LIST": [1491411385, 1412492409, 1411880585, 1192215826],
+    "DESTINATION_CHANNEL_ID": 1516341363,
+    "HEALTH_CHECK_INTERVAL_SECOND": 10,
+    "IGNORE_LIST": ["achieved",
+                    "leverage",
+                    "futures",
+                    "hit",
+                    "short",
+                    "period",
+                    "⚠",
+                    "🚀",
+                    "📉",
+                    "✅",
+                    "update",
+                    "video"]
+}

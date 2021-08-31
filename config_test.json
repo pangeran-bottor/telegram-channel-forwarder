@@ -1,0 +1,19 @@
+{
+    "SESSION_NAME": "testing",
+    "API_ID": 7478949,
+    "API_HASH": "99bca797db39d442cf87000bf3fa4007",
+    "SOURCE_CHANNEL_LIST": [1220402509],
+    "DESTINATION_CHANNEL_ID": 1576970177,
+    "HEALTH_CHECK_INTERVAL_SECOND": 10,
+    "IGNORE_LIST": ["achieved",
+                    "futures",
+                    "hit",
+                    "short",
+                    "period",
+                    "⚠",
+                    "🚀",
+                    "📉",
+                    "✅",
+                    "update",
+                    "video"]
+}

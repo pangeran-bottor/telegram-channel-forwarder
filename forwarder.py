@@ -1,4 +1,5 @@
 from datetime import datetime
+from telegram_parser import get_message_entities
 from telethon import TelegramClient, events
 from telethon import types
 from pprint import pprint
@@ -8,13 +9,41 @@ import requests
 
 
 def get_config():
-    with open("config.json", encoding="utf-8") as f:
+    with open("config_test.json", encoding="utf-8") as f:
         config = json.load(f)
     return config
 
 
 def get_current_time():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def generate_custom_message(original_message, entities):
+    pair = "undetected"
+    if entities["Pairs"]:
+        pair = entities["Pairs"][0]
+    else:
+        if entities["Coins"]:
+            pair = entities["Coins"][0]
+    buy = entities["Buy"]
+    tp = entities["TP"]
+    sl = entities["SL"]
+
+    raw_message = [
+        f"Pair: {pair}",
+        f"Buy: {buy}",
+        f"TP: {tp}",
+        f"SL: {sl}"
+    ]
+    entities_message = "\n".join(raw_message)
+
+    original_message_text = original_message.message
+    custom_message = "\n".join([original_message_text,
+                                "-"*5,
+                                "\n",
+                                entities_message])
+    original_message.message = custom_message
+    return original_message
 
 
 config = get_config()
@@ -40,16 +69,21 @@ async def new_message_listener(event):
     if type(event.message.peer_id) == types.PeerChannel:
         if is_valid_message(event.message.message):
             from_channel_id = event.message.peer_id.channel_id
+            entities = get_message_entities(event.message.message)
+
+            custom_message = generate_custom_message(event.message, entities)
+
             if from_channel_id in SOURCE_CHANNEL_LIST:
                 time_utc = event.message.date.strftime("%Y-%m-%d %H:%M:%S")
                 pprint({
                     "from_channel_id": from_channel_id,
                     "message": event.message.message,
+                    "entities": entities,
                     "timestamp_utc": time_utc
                 })
                 await client.\
                     send_message(types.PeerChannel(DESTINATION_CHANNEL_ID),
-                                 event.message)
+                                 custom_message)
 
 
 async def health_check(t):
